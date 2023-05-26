@@ -1,0 +1,32 @@
+.body {
+    text-align: center;
+    justify-content: center;
+   
+}
+img {
+    margin : 15px;
+    padding : 2% ;
+    border-radius : 50%;
+    width : 75px;
+    height : 75px
+}
+svg {
+    position: absolute;
+    right : 20px
+}
+svg:hover {
+    color : white;
+    background-color: grey;
+}
+.footerDiv {
+    display : flex;
+}
+
+.sendWishButton {
+    margin-left: auto;
+}
+#title {
+    display :flex;
+    flex-direction: row;
+
+}
