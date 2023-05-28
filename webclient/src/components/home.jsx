@@ -70,7 +70,8 @@ export default function Home() {
                <button type="button" className="btn btn-info btn-md" onClick = {handleClearAll}>Clear All</button></> 
                : <><h6>Cleared!!</h6><br/></> } 
                {"     "}<button type = "button" className="btn btn-info btn-md" onClick = {handleAdd}> Add People</button>
-               {addPeopleFlag ? <AddPeople sendCloseAlert = {handleCloseAlert}/> : ""}
+               {/* {addPeopleFlag ? <AddPeople sendCloseAlert = {handleCloseAlert}/> : ""} */}
+               <AddPeople sendCloseAlert = {handleCloseAlert}/>
         </div>
         </div>
         </>
