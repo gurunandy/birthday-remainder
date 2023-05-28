@@ -17,8 +17,13 @@ webclient
 
 -input field values are accessed using useRef hook
 
-server (not implemented)
+server
 --------------------------------
-created using express-generator
+-created using express-generator
+
+-mongodb is used with schema created
+
+
+
 
 
