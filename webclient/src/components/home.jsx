@@ -1,12 +1,21 @@
-import {useState } from "react";
+import {useState,useEffect } from "react";
 import './home.css';
 import peopleArr from "./people";
 import AddPeople from "./addPeople";
+import GetAllPeople from "./getAllPeople.js"
+import $ from 'jquery'
 
 export default function Home() {
-    const [people,setPeople] = useState(peopleArr)
+    const {data} = GetAllPeople();
+    const [people,setPeople] = useState([])
     const [clearFlag,setClearFlag] = useState(false)
     const [addPeopleFlag,setAddPeopleFlag] = useState(false)
+
+    useEffect(() => {
+        if (data !== undefined) {
+            setPeople(data);
+        }
+    }, [data]);
     //clears all the people shown 
     const handleClearAll = () => {
         console.log("clear")
@@ -26,6 +35,7 @@ export default function Home() {
     const handleAdd = () => {
         console.log("people to be added")
         setAddPeopleFlag(true);
+        
     }
     //close the add people form alert
     const handleCloseAlert = () => {
@@ -37,7 +47,7 @@ export default function Home() {
         {clearFlag ? "" : <h4 style = {{"textAlign" : "center"}}>{people.length} people have Birthday Today</h4>}<br/>
         <div className = "body  d-flex ">    
             <div>
-                {people.map((people,index) => {
+                {people == undefined ? "Loading" : people.map((people,index) => {
                     return (
                         <div className="card mb-3" style={{"width" : "500px","backgroundColor":"lavenderblush"}} key = {index}>
                 <div className="row g-0">
@@ -46,7 +56,7 @@ export default function Home() {
                         </div>
                         <div className="col-md-8">
                         <div className="card-body" style = {{"textAlign" : "justify"}}>
-                        <p id = "title"><h5 className="card-title  mb-0">{people.name}</h5>
+                        <p id = "title"><h5 className="card-title  mb-0">{people.name.charAt(0).toUpperCase() + people.name.slice(1)}</h5>
                         <span title = "close" onClick={() => handleClear(index)}>
                         <svg xmlns="http://www.w3.org/2000/svg"  
                         width="20" height="20" fill="currentColor" className="bi bi-x" viewBox="0 0 16 16">
@@ -56,22 +66,24 @@ export default function Home() {
                         </p>
                         <div className = "footerDiv">
                         <p className="card-text age"><small className="text-body-secondary">{people.age} years</small></p>
-                        <button type="button"  className="btn btn-outline-success btn-xs sendWishButton">send wishes</button>
+                        <p className="text-body-secondary">{people.mobilenumber}
+                        <button type="button"  className="btn btn-outline-success btn-xs sendWishButton">send wishes</button></p>
                         </div>
+                        
                         </div>
                         </div>
                     </div>
                     </div>
                     )
                 })}
+                {}
                {people.length !== 0 ?
                <>
                <button type = "button" className = "btn btn-md btn-success">send wishes to all</button> {" "}
                <button type="button" className="btn btn-info btn-md" onClick = {handleClearAll}>Clear All</button></> 
-               : <><h6>Cleared!!</h6><br/></> } 
+               : <><br/></> } 
                {"     "}<button type = "button" className="btn btn-info btn-md" onClick = {handleAdd}> Add People</button>
-               {/* {addPeopleFlag ? <AddPeople sendCloseAlert = {handleCloseAlert}/> : ""} */}
-               <AddPeople sendCloseAlert = {handleCloseAlert}/>
+               {addPeopleFlag ? <AddPeople sendCloseAlert = {handleCloseAlert}/> : ""}
         </div>
         </div>
         </>

@@ -24,43 +24,84 @@ const addPeople = (req,res) => {
               res.status(500).json({ message: "Internal server error" });
             });
         } else {
-          let isAlreadyAdded = false;
           console.log(result);
-      
-          result.forEach((obj, index) => {
-            console.log(obj.name);
-      
-            if (req.body.name !== obj.name) {
+          people.find({
+              $and : [
+                {mobilenumber : req.body.mobile},
+                {name : req.body.name}
+              ]
+            }).then(results => {
+              // Handle results
+              console.log("results",results)
+              if(results.length === 0) {
+                //add
+                    console.log("to save");
               newPeople
                 .save()
                 .then(() => {
-                  if (index === result.length - 1 && !isAlreadyAdded) {
-                    console.log("added successfully");
-                    res.status(200).json({ message: "Successfully added" });
-                  }
+                  res.status(200).json({ message: "Successfully added" });
                 })
                 .catch((err) => {
                   console.log("error in saving person");
                   res.status(500).json({ message: "Internal server error" });
                 });
-            } else {
-              console.log("added already");
-              isAlreadyAdded = true;
-              if (index === result.length - 1 && isAlreadyAdded) {
-                console.log("already added");
+              } else {
+                //already added
                 res.json({ message: "Already added" });
               }
-            }
-          });
+            })
+            .catch(err => {
+              // Handle error
+              console.log("error",err)
+              res.status(500).json({ message: "Internal server error" });
+            });
         }
       }).catch((error) => {
         console.error(error);
       });
-      
-    
+}
 
+const getPeople = (req,res) => {
+  let response = [];
+  const calculateAge = (dateOfBirth) => {
+    const birthDate = new Date(dateOfBirth);
+    const currentDate = new Date();
+  
+    let age = currentDate.getFullYear() - birthDate.getFullYear();
+  
+    // Check if the birthday hasn't occurred yet this year
+    const hasBirthdayPassed = currentDate.getMonth() > birthDate.getMonth() ||
+      (currentDate.getMonth() === birthDate.getMonth() && currentDate.getDate() >= birthDate.getDate());
+  
+    if (!hasBirthdayPassed) {
+      age--;
+    }
+  
+    return age;
+  };
+  people.find().then(result => {
+    result.map((data) =>{
+      if((new Date().getMonth && new Date().getDate()) == (new Date(data.dob).getMonth && new Date(data.dob).getDate())) {
+        response.push({
+          name : data.name,
+          mobilenumber : data.mobilenumber,
+          age  : calculateAge(data.dob),
+          image : "https://www.smileysapp.com/emojis/birthday-smiley.png"
+        })
+      }
+      
+    })
+   
+    
+    console.log("result",result)
+    res.send(response)
+  }).catch(err => {
+    console.log("error",err)
+     res.status(500).json({ message: "Internal server error" });
+  })
 }
 
 module.exports = {
-    addPeople
+    addPeople,
+    getPeople
 }

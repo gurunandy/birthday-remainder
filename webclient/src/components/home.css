@@ -20,10 +20,11 @@ svg:hover {
 }
 .footerDiv {
     display : flex;
+    flex-direction: column;
 }
 
 .sendWishButton {
-    margin-left: auto;
+    float:right
 }
 #title {
     display :flex;
