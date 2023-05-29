@@ -13,15 +13,19 @@ webclient
 
 -each card can be closed individually also all cards can be closed at once
 
--can also add people to our db(not implemented)
+-can also add people to our db
 
 -input field values are accessed using useRef hook
+
+-shows people(from db) who have bday today(implemented wuth custom hook)
 
 server
 --------------------------------
 -created using express-generator
 
 -mongodb is used with schema created
+
+
 
 
 
